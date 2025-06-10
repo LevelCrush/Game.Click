@@ -57,7 +57,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 5;
+            z-index: 1;
             pointer-events: none;
             opacity: 0;
             transition: opacity 1s ease;
@@ -71,6 +71,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            pointer-events: none;
         }
 
         .particle {
@@ -164,8 +165,6 @@
         
         // Click handler
         document.addEventListener('click', (e) => {
-            if (isVideoPlaying) return;
-            
             count++;
             counter.textContent = count;
             
@@ -178,7 +177,7 @@
             createClickEffects(e.clientX, e.clientY);
             
             // Random chance to play YouTube video
-            if (Math.random() < 0.1) { // 10% chance
+            if (!isVideoPlaying && Math.random() < 0.1) { // 10% chance
                 playRandomVideo();
             }
         });
