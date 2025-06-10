@@ -67,7 +67,8 @@
             opacity: 1;
         }
 
-        #youtube-container iframe {
+        #youtube-container iframe,
+        #youtube-player {
             width: 100%;
             height: 100%;
             border: none;
@@ -82,6 +83,7 @@
             background: radial-gradient(circle, white, transparent);
             border-radius: 50%;
             animation: explode 1s ease-out forwards;
+            z-index: 20;
         }
 
         @keyframes explode {
@@ -102,6 +104,7 @@
             pointer-events: none;
             transform: translate(-50%, -50%);
             animation: rippleEffect 0.6s ease-out forwards;
+            z-index: 20;
         }
 
         @keyframes rippleEffect {
@@ -226,54 +229,78 @@
             }
         }
         
+        let currentPlayer = null;
+        let playerReady = false;
+        
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        function onYouTubeIframeAPIReady() {
+            playerReady = true;
+        }
+        
         function playRandomVideo() {
-            if (isVideoPlaying) return;
+            if (isVideoPlaying || !playerReady) return;
             
             isVideoPlaying = true;
             const videoId = videoIds[Math.floor(Math.random() * videoIds.length)];
             
-            // Create YouTube iframe
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            
+            // Create container for iframe
+            const playerDiv = document.createElement('div');
+            playerDiv.id = 'youtube-player';
             youtubeContainer.innerHTML = '';
-            youtubeContainer.appendChild(iframe);
+            youtubeContainer.appendChild(playerDiv);
             youtubeContainer.classList.add('active');
             
-            // YouTube API to detect when video ends
-            let checkInterval = setInterval(() => {
-                try {
-                    iframe.contentWindow.postMessage('{"event":"listening"}', '*');
-                } catch (e) {}
-            }, 100);
-            
-            // Set a timeout to remove video (approximate video length)
-            setTimeout(() => {
-                clearInterval(checkInterval);
-                youtubeContainer.classList.remove('active');
-                setTimeout(() => {
-                    youtubeContainer.innerHTML = '';
-                    isVideoPlaying = false;
-                }, 1000);
-            }, 30000); // 30 seconds default
+            // Create YouTube player
+            currentPlayer = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: videoId,
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'showinfo': 0,
+                    'rel': 0,
+                    'modestbranding': 1,
+                    'iv_load_policy': 3
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
+                }
+            });
         }
         
-        // Listen for YouTube player state changes
-        window.addEventListener('message', (event) => {
-            if (event.data && typeof event.data === 'string') {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.event === 'onStateChange' && data.info === 0) { // Video ended
-                        youtubeContainer.classList.remove('active');
-                        setTimeout(() => {
-                            youtubeContainer.innerHTML = '';
-                            isVideoPlaying = false;
-                        }, 1000);
-                    }
-                } catch (e) {}
+        function onPlayerStateChange(event) {
+            // 0 = ended, 1 = playing, 2 = paused
+            if (event.data === YT.PlayerState.ENDED) {
+                fadeOutVideo();
             }
-        });
+        }
+        
+        function onPlayerError(event) {
+            console.log('YouTube player error:', event.data);
+            fadeOutVideo();
+        }
+        
+        function fadeOutVideo() {
+            youtubeContainer.classList.remove('active');
+            setTimeout(() => {
+                if (currentPlayer) {
+                    currentPlayer.destroy();
+                    currentPlayer = null;
+                }
+                youtubeContainer.innerHTML = '';
+                isVideoPlaying = false;
+            }, 1000);
+        }
+        
+        // Make onYouTubeIframeAPIReady available globally
+        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
     </script>
 </body>
 </html>
