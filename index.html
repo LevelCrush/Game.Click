@@ -589,6 +589,7 @@
 
         let currentPlayer = null;
         let playerReady = false;
+        let lastVideoId = null;
 
         // Load YouTube IFrame API
         const tag = document.createElement('script');
@@ -600,11 +601,28 @@
             playerReady = true;
         }
 
-        function playRandomVideo() {
-            if (isVideoPlaying || !playerReady) return;
+        function playRandomVideo(forceNew = false) {
+            if (!playerReady) return;
+
+            // If forcing new video or no video is playing, proceed
+            if (!forceNew && isVideoPlaying) return;
+
+            // Select a video that's different from the last one
+            let availableVideos = videoIds.filter(id => id !== lastVideoId);
+            if (availableVideos.length === 0) availableVideos = videoIds; // Fallback if somehow all are filtered
+            
+            const videoId = availableVideos[Math.floor(Math.random() * availableVideos.length)];
+            lastVideoId = videoId;
+            console.log("Target video", [videoId]);
+
+            // If player exists and we're forcing a new video, destroy old player first
+            if (currentPlayer && forceNew) {
+                currentPlayer.destroy();
+                currentPlayer = null;
+                // Don't return, continue to create new player
+            }
 
             isVideoPlaying = true;
-            const videoId = videoIds[Math.floor(Math.random() * videoIds.length)];
 
             // Create container for iframe
             const playerDiv = document.createElement('div');
@@ -674,11 +692,11 @@
 
             isMinigamePlaying = true;
             minigameScore = 0;
-            
+
             // Select a game that's different from the last one
             let availableGames = minigames.filter(game => game !== lastMinigame);
             if (availableGames.length === 0) availableGames = minigames; // Fallback if somehow all are filtered
-            
+
             const game = availableGames[Math.floor(Math.random() * availableGames.length)];
             currentMinigame = game;
             lastMinigame = game;
@@ -749,11 +767,11 @@
                 minigameContainer.classList.remove('active');
                 isMinigamePlaying = false;
                 currentMinigame = null;
-                
+
                 // Start a new video after mini-game ends with a small delay
                 setTimeout(() => {
-                    if (!isVideoPlaying && playerReady) {
-                        playRandomVideo();
+                    if (playerReady) {
+                        playRandomVideo(true); // Force new video
                     }
                 }, 500);
             }, 2000);
