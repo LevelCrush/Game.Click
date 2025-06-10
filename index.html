@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,9 +24,17 @@
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         #counter {
@@ -36,7 +45,7 @@
             font-size: 120px;
             font-weight: bold;
             color: white;
-            text-shadow: 0 0 30px rgba(0,0,0,0.5);
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             font-family: Arial, sans-serif;
             z-index: 10;
             transition: transform 0.1s ease;
@@ -47,8 +56,15 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
         }
 
         #youtube-container {
@@ -91,6 +107,7 @@
                 transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(var(--tx), var(--ty)) scale(0);
                 opacity: 0;
@@ -100,7 +117,7 @@
         .ripple {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,255,255,0.6), transparent);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
             pointer-events: none;
             transform: translate(-50%, -50%);
             animation: rippleEffect 0.6s ease-out forwards;
@@ -113,47 +130,371 @@
                 height: 0;
                 opacity: 1;
             }
+
             100% {
                 width: 300px;
                 height: 300px;
                 opacity: 0;
             }
         }
+
+        /* Mini-game styles */
+        #minigame-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        #minigame-container.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .minigame-title {
+            position: absolute;
+            top: 20px;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            font-family: Arial, sans-serif;
+        }
+
+        .minigame-score {
+            position: absolute;
+            top: 80px;
+            font-size: 30px;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .minigame-timer {
+            position: absolute;
+            top: 120px;
+            font-size: 25px;
+            color: #ffd700;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Whack-a-mole game */
+        .mole-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            grid-gap: 20px;
+            margin-top: 100px;
+        }
+
+        .mole-hole {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(ellipse, #654321, #3e2723);
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .mole {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #8b4513, #654321);
+            border-radius: 50%;
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: bottom 0.3s ease;
+        }
+
+        .mole.active {
+            bottom: 20px;
+        }
+
+        .mole.hit {
+            background: radial-gradient(circle, #ff6b6b, #ff4757);
+        }
+
+        /* Bubble pop game */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(66, 165, 245, 0.6));
+            box-shadow: 0 0 20px rgba(66, 165, 245, 0.4);
+            cursor: pointer;
+            animation: float 8s linear;
+            z-index: 101;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Target shoot game */
+        .target {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+        }
+
+        .target-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid;
+        }
+
+        .target-ring:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            border-color: #ff0000;
+            background: #ffcccc;
+        }
+
+        .target-ring:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 10px;
+            left: 10px;
+            border-color: #ff0000;
+            background: white;
+        }
+
+        .target-ring:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 20px;
+            border-color: #ff0000;
+            background: #ffcccc;
+        }
+
+        .target-ring:nth-child(4) {
+            width: 20px;
+            height: 20px;
+            top: 30px;
+            left: 30px;
+            border-color: #ff0000;
+            background: #ff0000;
+        }
+
+        /* Points of Interest game */
+        .poi {
+            position: absolute;
+            cursor: pointer;
+            z-index: 102;
+        }
+
+        .poi-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffd700, #ff6b6b);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .poi-star {
+            width: 60px;
+            height: 60px;
+            background: #00ff00;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: spin 2s linear infinite;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+
+        .poi-diamond {
+            width: 60px;
+            height: 60px;
+            background: #00bfff;
+            transform: rotate(45deg);
+            animation: bounce 1.5s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.8);
+        }
+
+        .poi-triangle {
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 60px solid #ff1493;
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.8));
+            animation: wobble 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes wobble {
+
+            0%,
+            100% {
+                transform: rotate(-5deg);
+            }
+
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .poi-points {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            animation: floatUp 1s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateX(-50%) translateY(-30px);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div id="counter">0</div>
     <div id="youtube-container"></div>
+    <div id="minigame-container"></div>
 
     <script>
         let count = 0;
         let isVideoPlaying = false;
+        let isMinigamePlaying = false;
         let mouseX = 0;
         let mouseY = 0;
-        
+
         const counter = document.getElementById('counter');
         const youtubeContainer = document.getElementById('youtube-container');
+        const minigameContainer = document.getElementById('minigame-container');
         const body = document.body;
-        
-        // YouTube video IDs (popular short videos)
+
+        // Click rate tracking
+        let clickTimes = [];
+        let lastMinigameCount = 0;
+        let nextMinigameThreshold = 0;
+        const CLICK_HISTORY_WINDOW = 30000; // 30 seconds
+        const MIN_TIME_BETWEEN_GAMES = 20000; // 20 seconds minimum
+        const MAX_TIME_BETWEEN_GAMES = 60000; // 60 seconds maximum
+        const TARGET_GAME_INTERVAL = 25000; // Target 25 seconds (middle of 20-30)
+
+        // YouTube video IDs (user-provided list)
         const videoIds = [
-            'dQw4w9WgXcQ', // Rick Roll
-            'kJQP7kiw5Fk', // Despacito
-            'CevxZvSJLk8', // Roar
-            'YQHsXMglC9A', // Hello
-            'fJ9rUzIMcZQ', // Bohemian Rhapsody
-            'JGwWNGJdvx8', // Shape of You
-            'RgKAFK5djSk', // See You Again
-            'SlPhMPnQ58k', // Memories
-            'bo_efYhYU2A', // Peaches
-            '60ItHLz5WEA' // Faded
+            'VYAMoFbeVFU', // HOGTV - hahahaha hohohoho
+            'F3jFTzhdZF4', // Weebl's Stuff - Crabs (animated music video)
+            'b1k8RdF5u2g', // Movies On Steroids - Pepe Lore Animation Part 1
+            'yzC4hFK5P3g', // Warner Music Japan - PONPONPON by Kyary Pamyu Pamyu
+            '9q5pZ49r9aU', // Weebl's Stuff - Ultrasound (Johnny Massacre)
+            'b8HO6hba9ZE', // an0nymooose - [SFM] We like to party
+            'l8wMVmY7Zpw', // an0nymooose - [SFM] Berdst friend
+            'dXqtrHJAqVM', // OCT - DON'T TOUCH MY CLOGS (music video)
+            '6v_R180kIGs', // OCT - HALF HORSE HALF MAN (official video)
+            'PjtwOl5-zzs', // Ragniqua - Kick Heart 1080p
+            'mgzTHUKATqo', // Nexus [GD] - Skeletal Shenanigans (Geometry Dash)
+            'BhFWCcnGj6Y', // ElCuboGris - Dr. Livesey walking meme (Helldivers)
+            '_Tg0mx8F2Oc', // pusameopalakaech - le poisson steve (YouTube Shorts)
+            'Vs6Hrukg1Zg', // RandoWis - Rock Smash
+            'HCdn0zg6NDM', // an0nymooose - [SFM] Duck Shoes
+            'BXtXtPTTCwo', // Forrage - Bro turns into a demon (YouTube Shorts)
+            'uE-1RPDqJAY', // Aaron Hardbarger - Taking the Hobbits to Isengard
+            'SycCrJ0IwAA', // Saga Lore AI - Avengers - Di Breddaz of Aveng-Jah
+            'gqIBo-87Z8Y', // Sikowny - nostalgia (sped up)
+            'v3rAXuHqODs', // shammy the loser - so phil, is it?
+            'ES02krPaPic', // Plants vs. Zombies - Sweet 16 Celebration
+            'rtyD3HNUa0Q', // Junipers world - DAYDREAM teaser
+            'C4Z0nGID-rc', // A Studio Digital - Pinnochio - Jonny Crickets
+            'P8U22dvli4w', // Rodrigo Goulão de Sousa - PLAYGROUND trailer
+            'I5cFBi02O34', // papajoolia - THE LEGEND OF PIPI
+            '4gvSYEqOMn8', // Felix Colgrave - DONKS
+            '9RHFFeQ2tu4', // Felix Colgrave - SOURCE (Fever The Ghost)
+            '1HHf8dGhsic', // ChillReviewer - The Day The Earth Blew Up
+            'Xn4hzm-pVP8', // Media Archive - Ballz 3D SNES Title Screen
+            'EA5eIAfutYU', // CarBombMusic - Car Bomb - Dissect Yourself
+            'J1DAmmROUX8', // Anya Nami - Bread (Official Music Video)
+            'E_DTjqY44kc', // vibingleaf - I'm So Tired, Finn.
+            'ifY-5UZRamU', // Grandayy - Smash Mouth - Shooting All Star
+            '4Jog1B_as7Q', // void - Xavier Renegade Angel - Xavier Meets Xavier
+            'Jl6lee2wyPQ', // ceno0 - POOTIS ENGAGE
+            'G2KvU7dfOck', // Goldboy Jr - Black Dynamite scene
+            'RhMYBfF7-hE', // Little Big - HYPNODANCER
+            'nBHkIWAJitg', // Handsome Dancer - Coincidance
+            'ACHVwA1D8fE'  // James Lee (Animation) - TARBOY
         ];
-        
+
+        // Calculate average clicks per second
+        function getClickRate() {
+            const now = Date.now();
+            // Remove old clicks outside the window
+            clickTimes = clickTimes.filter(time => now - time < CLICK_HISTORY_WINDOW);
+
+            if (clickTimes.length < 2) return 0.5; // Default to 0.5 clicks/second
+
+            const timeSpan = now - clickTimes[0];
+            return clickTimes.length / (timeSpan / 1000);
+        }
+
+        // Calculate next mini-game threshold
+        function calculateNextMinigameThreshold() {
+            const clickRate = getClickRate();
+            const targetClicksForInterval = clickRate * (TARGET_GAME_INTERVAL / 1000);
+
+            // Add randomness (80% to 120% of target)
+            const randomFactor = 0.8 + Math.random() * 0.4;
+            let threshold = Math.round(targetClicksForInterval * randomFactor);
+
+            // Ensure minimum clicks based on time constraints
+            const minClicks = Math.ceil(clickRate * (MIN_TIME_BETWEEN_GAMES / 1000));
+            const maxClicks = Math.ceil(clickRate * (MAX_TIME_BETWEEN_GAMES / 1000));
+
+            threshold = Math.max(minClicks, Math.min(maxClicks, threshold));
+
+            // Ensure at least 10 clicks between games
+            return Math.max(10, threshold);
+        }
+
         // Track mouse position
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            
+
             // Update gradient based on mouse position
             const hue1 = (mouseX / window.innerWidth) * 360;
             const hue2 = (mouseY / window.innerHeight) * 360;
@@ -165,26 +506,43 @@
             body.style.background = gradient;
             body.style.backgroundSize = '400% 400%';
         });
-        
+
+        // Initialize first threshold
+        nextMinigameThreshold = calculateNextMinigameThreshold();
+
         // Click handler
         document.addEventListener('click', (e) => {
-            count++;
-            counter.textContent = count;
-            
-            // Bounce animation
-            counter.classList.remove('bounce');
-            void counter.offsetWidth; // Force reflow
-            counter.classList.add('bounce');
-            
-            // Create effects based on click position
-            createClickEffects(e.clientX, e.clientY);
-            
-            // Random chance to play YouTube video
-            if (!isVideoPlaying && Math.random() < 0.1) { // 10% chance
-                playRandomVideo();
+            // Don't count clicks if minigame is active
+            if (!isMinigamePlaying) {
+                count++;
+                counter.textContent = count;
+
+                // Track click time
+                clickTimes.push(Date.now());
+
+                // Bounce animation
+                counter.classList.remove('bounce');
+                void counter.offsetWidth; // Force reflow
+                counter.classList.add('bounce');
+
+                // Create effects based on click position
+                createClickEffects(e.clientX, e.clientY);
+
+                // Random chance to play YouTube video
+                if (!isVideoPlaying && Math.random() < 0.1) { // 10% chance
+                    playRandomVideo();
+                }
+
+                // Check if we should start a mini-game
+                const clicksSinceLastGame = count - lastMinigameCount;
+                if (!isMinigamePlaying && clicksSinceLastGame >= nextMinigameThreshold) {
+                    startRandomMinigame();
+                    lastMinigameCount = count;
+                    nextMinigameThreshold = calculateNextMinigameThreshold();
+                }
             }
         });
-        
+
         function createClickEffects(x, y) {
             // Create ripple effect
             const ripple = document.createElement('div');
@@ -193,31 +551,31 @@
             ripple.style.top = y + 'px';
             body.appendChild(ripple);
             setTimeout(() => ripple.remove(), 600);
-            
+
             // Create particle explosion
             for (let i = 0; i < 20; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
-                
+
                 // Random color
                 const hue = Math.random() * 360;
                 particle.style.background = `radial-gradient(circle, hsl(${hue}, 100%, 70%), transparent)`;
-                
+
                 // Random direction
                 const angle = (Math.PI * 2 * i) / 20 + (Math.random() - 0.5) * 0.5;
                 const velocity = 100 + Math.random() * 150;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
-                
+
                 particle.style.setProperty('--tx', tx + 'px');
                 particle.style.setProperty('--ty', ty + 'px');
-                
+
                 body.appendChild(particle);
                 setTimeout(() => particle.remove(), 1000);
             }
-            
+
             // Random background flash
             if (Math.random() < 0.3) {
                 const originalBg = body.style.background;
@@ -228,33 +586,33 @@
                 }, 100);
             }
         }
-        
+
         let currentPlayer = null;
         let playerReady = false;
-        
+
         // Load YouTube IFrame API
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        
+
         function onYouTubeIframeAPIReady() {
             playerReady = true;
         }
-        
+
         function playRandomVideo() {
             if (isVideoPlaying || !playerReady) return;
-            
+
             isVideoPlaying = true;
             const videoId = videoIds[Math.floor(Math.random() * videoIds.length)];
-            
+
             // Create container for iframe
             const playerDiv = document.createElement('div');
             playerDiv.id = 'youtube-player';
             youtubeContainer.innerHTML = '';
             youtubeContainer.appendChild(playerDiv);
             youtubeContainer.classList.add('active');
-            
+
             // Create YouTube player
             currentPlayer = new YT.Player('youtube-player', {
                 height: '100%',
@@ -274,19 +632,19 @@
                 }
             });
         }
-        
+
         function onPlayerStateChange(event) {
             // 0 = ended, 1 = playing, 2 = paused
             if (event.data === YT.PlayerState.ENDED) {
                 fadeOutVideo();
             }
         }
-        
+
         function onPlayerError(event) {
             console.log('YouTube player error:', event.data);
             fadeOutVideo();
         }
-        
+
         function fadeOutVideo() {
             youtubeContainer.classList.remove('active');
             setTimeout(() => {
@@ -298,9 +656,344 @@
                 isVideoPlaying = false;
             }, 1000);
         }
-        
+
         // Make onYouTubeIframeAPIReady available globally
         window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+        // Mini-game system
+        const minigames = ['whackamole', 'bubblepop', 'targetshoot', 'pointsofinterest'];
+        let currentMinigame = null;
+        let lastMinigame = null;
+        let minigameScore = 0;
+        let minigameTimer = null;
+        let minigameInterval = null;
+        let poiTimeouts = [];
+
+        function startRandomMinigame() {
+            if (isMinigamePlaying) return;
+
+            isMinigamePlaying = true;
+            minigameScore = 0;
+            
+            // Select a game that's different from the last one
+            let availableGames = minigames.filter(game => game !== lastMinigame);
+            if (availableGames.length === 0) availableGames = minigames; // Fallback if somehow all are filtered
+            
+            const game = availableGames[Math.floor(Math.random() * availableGames.length)];
+            currentMinigame = game;
+            lastMinigame = game;
+
+            // Clear container
+            minigameContainer.innerHTML = '';
+            minigameContainer.classList.add('active');
+
+            // Add title and score
+            const title = document.createElement('div');
+            title.className = 'minigame-title';
+            title.textContent = game === 'whackamole' ? 'Whack-a-Mole!' :
+                game === 'bubblepop' ? 'Pop the Bubbles!' :
+                    game === 'targetshoot' ? 'Target Practice!' :
+                        'Click the Shapes!';
+            minigameContainer.appendChild(title);
+
+            const scoreDiv = document.createElement('div');
+            scoreDiv.className = 'minigame-score';
+            scoreDiv.id = 'minigame-score';
+            scoreDiv.textContent = 'Score: 0';
+            minigameContainer.appendChild(scoreDiv);
+
+            const timerDiv = document.createElement('div');
+            timerDiv.className = 'minigame-timer';
+            timerDiv.id = 'minigame-timer';
+            timerDiv.textContent = 'Time: 10';
+            minigameContainer.appendChild(timerDiv);
+
+            // Start the specific game
+            if (game === 'whackamole') startWhackAMole();
+            else if (game === 'bubblepop') startBubblePop();
+            else if (game === 'targetshoot') startTargetShoot();
+            else if (game === 'pointsofinterest') startPointsOfInterest();
+
+            // Game timer
+            let timeLeft = 10;
+            minigameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('minigame-timer').textContent = `Time: ${timeLeft}`;
+                if (timeLeft <= 0) {
+                    endMinigame();
+                }
+            }, 1000);
+        }
+
+        function endMinigame() {
+            clearInterval(minigameTimer);
+            clearInterval(minigameInterval);
+
+            // Clear POI timeouts
+            poiTimeouts.forEach(timeout => clearTimeout(timeout));
+            poiTimeouts = [];
+
+            // Show final score
+            minigameContainer.innerHTML = `
+                <div class="minigame-title">Game Over!</div>
+                <div class="minigame-score" style="font-size: 50px;">Final Score: ${minigameScore}</div>
+                <div class="minigame-timer">Bonus clicks: +${Math.floor(minigameScore / 2)}</div>
+            `;
+
+            // Add bonus clicks
+            count += Math.floor(minigameScore / 2);
+            counter.textContent = count;
+
+            // Close after 2 seconds
+            setTimeout(() => {
+                minigameContainer.classList.remove('active');
+                isMinigamePlaying = false;
+                currentMinigame = null;
+                
+                // Start a new video after mini-game ends with a small delay
+                setTimeout(() => {
+                    if (!isVideoPlaying && playerReady) {
+                        playRandomVideo();
+                    }
+                }, 500);
+            }, 2000);
+        }
+
+        function updateMinigameScore() {
+            minigameScore++;
+            document.getElementById('minigame-score').textContent = `Score: ${minigameScore}`;
+        }
+
+        // Whack-a-Mole game
+        function startWhackAMole() {
+            const grid = document.createElement('div');
+            grid.className = 'mole-grid';
+
+            // Create 9 holes
+            for (let i = 0; i < 9; i++) {
+                const hole = document.createElement('div');
+                hole.className = 'mole-hole';
+                hole.dataset.index = i;
+
+                const mole = document.createElement('div');
+                mole.className = 'mole';
+                hole.appendChild(mole);
+
+                hole.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (mole.classList.contains('active') && !mole.classList.contains('hit')) {
+                        mole.classList.add('hit');
+                        updateMinigameScore();
+                        setTimeout(() => {
+                            mole.classList.remove('active', 'hit');
+                        }, 300);
+                    }
+                });
+
+                grid.appendChild(hole);
+            }
+
+            minigameContainer.appendChild(grid);
+
+            // Random mole popup
+            minigameInterval = setInterval(() => {
+                const holes = document.querySelectorAll('.mole-hole');
+                const randomHole = holes[Math.floor(Math.random() * holes.length)];
+                const mole = randomHole.querySelector('.mole');
+
+                if (!mole.classList.contains('active')) {
+                    mole.classList.add('active');
+                    setTimeout(() => {
+                        mole.classList.remove('active');
+                    }, 800);
+                }
+            }, 600);
+        }
+
+        // Bubble Pop game
+        function startBubblePop() {
+            minigameInterval = setInterval(() => {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+
+                const size = 40 + Math.random() * 60;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * (window.innerWidth - size) + 'px';
+                bubble.style.bottom = '-100px';
+
+                bubble.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    bubble.remove();
+                    updateMinigameScore();
+
+                    // Pop effect
+                    for (let i = 0; i < 10; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = e.clientX + 'px';
+                        particle.style.top = e.clientY + 'px';
+                        particle.style.background = 'radial-gradient(circle, rgba(66,165,245,0.8), transparent)';
+
+                        const angle = (Math.PI * 2 * i) / 10;
+                        const velocity = 50 + Math.random() * 100;
+                        particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+                        particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+
+                        document.body.appendChild(particle);
+                        setTimeout(() => particle.remove(), 1000);
+                    }
+                });
+
+                minigameContainer.appendChild(bubble);
+
+                // Remove bubble after animation
+                setTimeout(() => bubble.remove(), 8000);
+            }, 400);
+        }
+
+        // Target Shoot game
+        function startTargetShoot() {
+            function createTarget() {
+                const target = document.createElement('div');
+                target.className = 'target';
+
+                // Create rings
+                for (let i = 0; i < 4; i++) {
+                    const ring = document.createElement('div');
+                    ring.className = 'target-ring';
+                    target.appendChild(ring);
+                }
+
+                // Random position
+                const maxX = window.innerWidth - 80;
+                const maxY = window.innerHeight - 200;
+                target.style.left = Math.random() * maxX + 'px';
+                target.style.top = 200 + Math.random() * maxY + 'px';
+
+                // Movement
+                let dx = (Math.random() - 0.5) * 4;
+                let dy = (Math.random() - 0.5) * 4;
+                let x = parseFloat(target.style.left);
+                let y = parseFloat(target.style.top);
+
+                const moveInterval = setInterval(() => {
+                    x += dx;
+                    y += dy;
+
+                    if (x <= 0 || x >= maxX) dx = -dx;
+                    if (y <= 200 || y >= 200 + maxY) dy = -dy;
+
+                    target.style.left = x + 'px';
+                    target.style.top = y + 'px';
+                }, 20);
+
+                target.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    clearInterval(moveInterval);
+
+                    // Calculate points based on accuracy
+                    const rect = target.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const distance = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
+
+                    const points = distance < 10 ? 5 : distance < 20 ? 3 : distance < 30 ? 2 : 1;
+                    minigameScore += points;
+                    document.getElementById('minigame-score').textContent = `Score: ${minigameScore}`;
+
+                    // Hit effect
+                    target.style.transform = 'scale(1.5)';
+                    target.style.opacity = '0.5';
+                    setTimeout(() => target.remove(), 200);
+                });
+
+                minigameContainer.appendChild(target);
+
+                // Remove after 3 seconds if not hit
+                setTimeout(() => {
+                    clearInterval(moveInterval);
+                    target.remove();
+                }, 3000);
+            }
+
+            // Create targets periodically
+            createTarget();
+            minigameInterval = setInterval(createTarget, 1000);
+        }
+
+        // Points of Interest game
+        function startPointsOfInterest() {
+            const shapes = ['poi-circle', 'poi-star', 'poi-diamond', 'poi-triangle'];
+            const shapePoints = { 'poi-circle': 1, 'poi-star': 2, 'poi-diamond': 3, 'poi-triangle': 5 };
+
+            function createPOI() {
+                const poi = document.createElement('div');
+                poi.className = 'poi';
+
+                const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+                const shape = document.createElement('div');
+                shape.className = shapeType;
+                poi.appendChild(shape);
+
+                // Random position with padding from edges
+                const padding = 80;
+                const maxX = window.innerWidth - padding;
+                const maxY = window.innerHeight - padding - 150; // Account for UI
+                poi.style.left = padding + Math.random() * (maxX - padding) + 'px';
+                poi.style.top = 200 + Math.random() * maxY + 'px';
+
+                poi.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    const points = shapePoints[shapeType];
+                    minigameScore += points;
+                    document.getElementById('minigame-score').textContent = `Score: ${minigameScore}`;
+
+                    // Show points
+                    const pointsDiv = document.createElement('div');
+                    pointsDiv.className = 'poi-points';
+                    pointsDiv.textContent = `+${points}`;
+                    poi.appendChild(pointsDiv);
+
+                    // Create explosion effect
+                    for (let i = 0; i < 15; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = e.clientX + 'px';
+                        particle.style.top = e.clientY + 'px';
+
+                        const hue = Math.random() * 360;
+                        particle.style.background = `radial-gradient(circle, hsl(${hue}, 100%, 70%), transparent)`;
+                        particle.style.width = '15px';
+                        particle.style.height = '15px';
+
+                        const angle = (Math.PI * 2 * i) / 15;
+                        const velocity = 100 + Math.random() * 100;
+                        particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+                        particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+
+                        document.body.appendChild(particle);
+                        setTimeout(() => particle.remove(), 1000);
+                    }
+
+                    // Remove POI after animation
+                    setTimeout(() => poi.remove(), 300);
+                });
+
+                minigameContainer.appendChild(poi);
+
+                // Auto-remove after time based on difficulty
+                const lifetime = 3000 - (shapePoints[shapeType] - 1) * 500; // Harder shapes disappear faster
+                const timeout = setTimeout(() => poi.remove(), lifetime);
+                poiTimeouts.push(timeout);
+            }
+
+            // Create POIs periodically
+            createPOI();
+            minigameInterval = setInterval(createPOI, 800);
+        }
     </script>
 </body>
+
 </html>
